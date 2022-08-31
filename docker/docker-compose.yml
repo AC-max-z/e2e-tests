@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  kafka:
+    image: registry.belkacar.ru/infra/belka_base/belka_zookeeper_kafka:2.7.0-k1
+    ports:
+      - '9092:9092'
+      - '2181:2181'
+    environment:
+      - ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092,INTERNAL://localhost:9093
+      - LISTENERS=PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:9093
+      - SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT
+      - INTER_BROKER=INTERNAL
