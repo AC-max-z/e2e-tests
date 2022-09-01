@@ -88,7 +88,7 @@ subprojects {
     tasks.withType<Test> {
         doFirst {
             systemProperty("allure.label.service", rootProject.name)
-            systemProperty("allure.label.service-group", "geofence-services")
+            systemProperty("allure.label.service-group", "e2e-tests")
             systemProperty("allure.results.directory", "${rootProject.projectDir}/allure-results")
         }
         testLogging {

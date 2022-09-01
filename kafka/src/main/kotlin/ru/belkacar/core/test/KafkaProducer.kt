@@ -1,4 +1,4 @@
-package ru.belkacar.core.test.kafka
+package ru.belkacar.core.test
 
 interface KafkaProducer {
 
