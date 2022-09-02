@@ -1,0 +1,23 @@
+broadcasting-platform:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    client-id: ${spring.application.name}
+    car-position-stream: "telematics_car_position_events"
+    unknown-car-positions-stream: "telematics_unknown_car_position_events"
+    telematics-positions-stream: "telematics_position_events_stream"
+    device-relation-history-table: "device_car_relation_history"
+
+geofence-services:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    client-id: ${spring.application.name}
+
+
+
+
+#      "CAR_POSITIONS_STREAM": "telematics_car_position_events",
+#      "KAFKA_BOOTSTRAP_SERVERS": "test-kafka-01.belkacar.ru:9092,test-kafka-02.belkacar.ru:9092,test-kafka-03.belkacar.ru:9092",
+#      "SERVER_PORT": "${NOMAD_PORT_http}",
+#      "TELEMATICS_POSITIONS_STREAM": "telematics_position_events_stream",
+#      "DEVICE_RELATION_HISTORY_TABLE": "device_car_relation_history",
+#      "UNKNOWN_CAR_POSITIONS_STREAM": "telematics_unknown_car_position_events"

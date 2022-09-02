@@ -11,3 +11,14 @@ services:
       - LISTENERS=PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:9093
       - SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT
       - INTER_BROKER=INTERNAL
+      - KAFKA_CREATE_TOPICS=telematics_car_position_events:1:1,telematics_unknown_car_position_events:1:1,telematics_position_events_stream:1:1,device_car_relation_history:1:1
+
+#  kafka-ui:
+#    image: provectuslabs/kafka-ui
+#    ports:
+#      - "8080:8080"
+#    restart: always
+#    environment:
+#      - KAFKA_CLUSTERS_0_NAME=localhost
+#      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+#      - KAFKA_CLUSTERS_0_ZOOKEEPER=localhost:2181

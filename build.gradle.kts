@@ -64,7 +64,7 @@ subprojects {
             dependency("com.google.protobuf:protobuf-kotlin:$protobufVersion")
             dependency("io.grpc:grpc-netty-shaded:$grpcVersion")
 
-            /* spting */
+            /* spring */
             dependency("io.github.lognet:grpc-spring-boot-starter:4.8.1")
 
             /* gRPC proto */
