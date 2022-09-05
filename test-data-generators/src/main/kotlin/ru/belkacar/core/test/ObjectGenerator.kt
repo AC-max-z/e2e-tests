@@ -4,6 +4,6 @@ interface ObjectGenerator<T> {
 
     fun generate(): T
 
-    fun generateMany(count: Int): List<T>
+    fun generateMany(size: Int): List<T>
 
 }

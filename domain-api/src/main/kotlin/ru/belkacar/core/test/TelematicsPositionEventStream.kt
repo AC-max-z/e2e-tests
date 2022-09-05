@@ -1,7 +1,7 @@
 package ru.belkacar.core.test
 
-data class Car(
-    val deviceId: Int,
+data class TelematicsPositionEventStream(
+    val deviceId: String,
     val deviceImei: String,
     val deviceSensors: List<Any>,
     val fixTime: String,

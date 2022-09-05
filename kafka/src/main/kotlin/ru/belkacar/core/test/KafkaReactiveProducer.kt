@@ -3,7 +3,6 @@ package ru.belkacar.core.test
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.serialization.IntegerSerializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.apache.kafka.common.serialization.UUIDSerializer
 import org.slf4j.LoggerFactory
@@ -15,7 +14,6 @@ import reactor.kafka.sender.SenderOptions
 import reactor.kafka.sender.SenderRecord
 import reactor.kafka.sender.SenderResult
 import java.util.*
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 @Component
@@ -27,30 +25,30 @@ class KafkaReactiveProducer<K, V>(
         private val logger = LoggerFactory.getLogger(KafkaReactiveProducer::class.java)
     }
 
-    private val sender: KafkaSender<UUID, String>
+    private val sender: KafkaSender<String, String>
 
     init {
         val producerProps = Properties()
         producerProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaConfiguration.bootstrapServers
-        producerProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = UUIDSerializer::class.java
+        producerProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         producerProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
-        val senderOptions = SenderOptions.create<UUID, String>(producerProps) //.maxInFlight(1024)
+        val senderOptions = SenderOptions.create<String, String>(producerProps) //.maxInFlight(1024)
 
         sender = KafkaSender.create(senderOptions)
     }
 
-    fun consume(topic: String, key: UUID, value: Any): SenderResult<String>? {
+    fun consume(topic: String, key: String, value: Any): SenderResult<String>? {
 
-        val valueAsString : String = ObjectMapper().writeValueAsString(Car(UUID.randomUUID(), "skoda", 98))
+        val jsonValue = ObjectMapper().writeValueAsString(value)
 
-        val producerRecord = ProducerRecord(kafkaConfiguration.carPositionStream, key, valueAsString)
+        val producerRecord = ProducerRecord(topic, key, jsonValue)
 
         return send(Mono
-            .just(SenderRecord.create(producerRecord, key.toString())))
+            .just(SenderRecord.create(producerRecord, key)))
             .blockLast()
     }
 
-    private fun send(outboundFlux: Mono<SenderRecord<UUID, String, String>>): Flux<SenderResult<String>> {
+    private fun send(outboundFlux: Mono<SenderRecord<String, String, String>>): Flux<SenderResult<String>> {
         return sender.send(outboundFlux)
             .doOnError { e -> logger.error("Send failed", e) }
             .doOnNext { r ->
@@ -63,10 +61,3 @@ class KafkaReactiveProducer<K, V>(
     }
 
 }
-
-
-data class Car(
-    val carId: UUID,
-    val carType: String,
-    val fuelType: Int
-)

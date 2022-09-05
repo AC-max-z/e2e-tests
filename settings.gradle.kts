@@ -4,5 +4,6 @@ include(
     ":kafka",
     ":broadcasting-platform-tests",
     ":test-data-generators",
-    ":bootstrap"
+    ":bootstrap",
+    "domain-api"
 )

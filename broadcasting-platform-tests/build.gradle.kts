@@ -2,6 +2,7 @@ dependencies {
     testImplementation(project(":bootstrap"))
     testImplementation(project(":kafka"))
     testImplementation(project(":test-data-generators"))
+    testImplementation(project(":domain-api"))
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
