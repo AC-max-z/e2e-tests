@@ -35,8 +35,8 @@ class ProduceMessage @Autowired constructor(
 
         consumer
             .consume()
+            .skipUntil { r -> r.key().equals(key) }
             .test()
-            .recordWith { mutableListOf<ReceiverRecord<String, String>>() }
             .assertNext {
                 assertEquals(expectMessage, it.value())
                 assertEquals(key, it.key())
@@ -45,6 +45,7 @@ class ProduceMessage @Autowired constructor(
             .log()
             .verify()
     }
+
 
 }
 
