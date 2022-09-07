@@ -13,4 +13,5 @@ class BroadcastingPlatformKafkaConfiguration {
     lateinit var unknownCarPositionsStream: String
     lateinit var telematicsPositionsStream: String
     lateinit var deviceRelationHistoryTable: String
+    lateinit var autoOffsetReset: String
 }

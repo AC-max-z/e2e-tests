@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
-import org.apache.kafka.common.serialization.UUIDSerializer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
@@ -16,9 +15,8 @@ import reactor.kafka.sender.SenderResult
 import java.util.*
 
 
-@Component
 class KafkaReactiveProducer<K, V>(
-    private val kafkaConfiguration: BroadcastingPlatformKafkaConfiguration
+    bootstrapServers: String
 ) {
 
     companion object {
@@ -29,7 +27,7 @@ class KafkaReactiveProducer<K, V>(
 
     init {
         val producerProps = Properties()
-        producerProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaConfiguration.bootstrapServers
+        producerProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapServers
         producerProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         producerProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         val senderOptions = SenderOptions.create<String, String>(producerProps) //.maxInFlight(1024)
@@ -37,7 +35,7 @@ class KafkaReactiveProducer<K, V>(
         sender = KafkaSender.create(senderOptions)
     }
 
-    fun consume(topic: String, key: String, value: Any): SenderResult<String>? {
+    fun produce(topic: String, key: String, value: Any): SenderResult<String>? {
 
         val jsonValue = ObjectMapper().writeValueAsString(value)
 

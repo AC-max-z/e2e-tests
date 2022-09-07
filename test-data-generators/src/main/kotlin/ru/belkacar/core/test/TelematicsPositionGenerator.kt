@@ -5,16 +5,16 @@ import java.util.*
 
 class TelematicsPositionGenerator: ObjectGenerator<TelematicsPositionEventStream> {
 
-    private var deviceId = UUID.randomUUID().toString()
+    private var deviceId = (1000..9999).random()
     private var deviceImei = UUID.randomUUID().toString()
     private var deviceSensors: List<Any> = emptyList()
     private var fixTime = LocalDateTime.now().toString()
     private var id = System.currentTimeMillis().toInt()
     private var navigation = NavigationGenerator().generate()
-    private var serverTime = LocalDateTime.now().toString()
+    private var serverTime = LocalDateTime.now().toString() // без мимлисекунд
     private var vehicleSensors: List<VehicleSensor> = emptyList()
 
-    fun withDeviceId(id: String) { deviceId = id }
+    fun withDeviceId(id: Int) { deviceId = id }
     fun withDeviceImei(imei: String) { deviceImei = imei }
     fun withDeviceSensors(sensors: List<Any>) { deviceSensors = sensors }
     fun withFixTime(time: String) { fixTime = time }

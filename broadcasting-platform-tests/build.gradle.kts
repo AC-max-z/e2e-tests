@@ -14,7 +14,8 @@ dependencies {
     testImplementation("ru.belkacar.core.test.tools", "allure-annotations")
     testImplementation("org.jetbrains.kotlin", "kotlin-test")
     testImplementation("io.github.serpro69", "kotlin-faker")
-
-    implementation("org.springframework.kafka", "spring-kafka")
-    implementation("io.projectreactor.kafka", "reactor-kafka")
+    testImplementation("io.projectreactor.kotlin", "reactor-kotlin-extensions")
+    testImplementation("org.springframework.kafka", "spring-kafka")
+    testImplementation("io.projectreactor.kafka", "reactor-kafka")
+    testImplementation("org.n52.jackson", "jackson-datatype-jts")
 }
