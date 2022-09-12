@@ -13,7 +13,7 @@ class NavigationGenerator: ObjectGenerator<Navigation> {
     private var longitude = location.longitude
     private var valid = true
 
-    fun withAltitude(value: Double) { altitude = value }
+    fun withAltitude(value: Double) = also { altitude = value }
     fun withCourse(value: Double) = apply { course = value }
     fun withGlnSatellites(value: Int) = apply { glnSatellites = value }
     fun withGpsSatellites(value: Int) = apply { gpsSatellites = value }

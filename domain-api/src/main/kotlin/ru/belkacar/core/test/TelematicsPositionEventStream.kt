@@ -3,7 +3,7 @@ package ru.belkacar.core.test
 data class TelematicsPositionEventStream(
     val deviceId: Int,
     val deviceImei: String,
-    val deviceSensors: List<Any>,
+    val deviceSensors: List<DeviceSensor>,
     val fixTime: String,
     val id: Int,
     val navigation: Navigation,
