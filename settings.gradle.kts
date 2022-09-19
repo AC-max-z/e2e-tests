@@ -5,5 +5,6 @@ include(
     ":broadcasting-platform-tests",
     ":test-data-generators",
     ":bootstrap",
-    "domain-api"
+    ":domain-api",
+    ":grpc"
 )

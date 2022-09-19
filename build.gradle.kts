@@ -1,4 +1,3 @@
-import com.google.protobuf.gradle.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "ru.belkacar.core.test"
@@ -9,8 +8,9 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.21" apply false
     kotlin("plugin.spring") version "1.6.21" apply false
-    id ("io.qameta.allure") version "2.9.6" apply false
+    id("io.qameta.allure") version "2.9.6" apply false
     id("com.google.protobuf") version "0.8.17" apply false
+    idea
 }
 
 val protobufVersion by extra { "3.21.1" }
@@ -23,6 +23,7 @@ subprojects {
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.kotlin.plugin.spring")
         plugin("io.qameta.allure")
+        plugin("idea")
     }
 
     repositories {
@@ -68,7 +69,7 @@ subprojects {
             dependency("io.github.lognet:grpc-spring-boot-starter:4.8.1")
 
             /* gRPC proto */
-            dependency("proto.belka.telematics.geofences:telematics-geofences-ops-proto:0.0.8")
+            dependency("proto.belka.telematics.geofences:telematics-geofences-ops-proto:0.0.9")
 
             /* test dependencies */
             dependency("org.locationtech.jts.io:jts-io-common:1.18.2")
