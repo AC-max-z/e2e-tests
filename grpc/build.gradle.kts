@@ -11,6 +11,12 @@ dependencies {
     api("io.grpc", "grpc-protobuf")
     api("io.grpc", "grpc-kotlin-stub")
     api("io.grpc","grpc-stub")
+    implementation("io.grpc:grpc-netty-shaded")
+
+    compileOnly("org.springframework", "spring-context")
+
+    testImplementation("ru.belkacar.core.test.tools", "reactor-allure-extentions")
+    testImplementation("ru.belkacar.core.test.tools", "allure-annotations")
 }
 
 sourceSets {

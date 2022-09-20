@@ -6,5 +6,6 @@ include(
     ":test-data-generators",
     ":bootstrap",
     ":domain-api",
-    ":grpc"
+    ":grpc",
+    ":geofence-services-tests"
 )

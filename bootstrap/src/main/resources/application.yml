@@ -13,6 +13,16 @@ geofence-services:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     client-id: ${spring.application.name}
 
+telematics-services:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    client-id: ${spring.application.name}
+    auto-offset-reset: ${AUTO_OFFSET_RESET:earliest}
+    car-position-stream: ${CAR_POSITION_STREAM:telematics_car_position_events}
+    unknown-car-positions-stream: ${UNKNOWN_CAR_POSITIONS_STREAM:telematics_unknown_car_position_events}
+    telematics-positions-stream: ${TELEMATICS_POSITIONS_STREAM:telematics_position_events_stream}
+    device-relation-history-table: ${DEVICE_REALATION_HISTORY_TABLE:device_car_relation_history}
+
 
 
 
