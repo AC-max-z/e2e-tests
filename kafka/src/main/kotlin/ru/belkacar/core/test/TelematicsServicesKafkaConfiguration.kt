@@ -13,4 +13,6 @@ class TelematicsServicesKafkaConfiguration {
     lateinit var telematicsPositionsStream: String
     lateinit var deviceRelationHistoryTable: String
     lateinit var autoOffsetReset: String
+    lateinit var latestPositionStream: String
+    lateinit var geofenceEventsStream: String
 }

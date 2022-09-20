@@ -4,6 +4,8 @@ interface ObjectGenerator<T> {
 
     fun generate(): T
 
-    fun generateMany(size: Int): List<T>
+    fun generateMany(size: Int): List<T> {
+        return MutableList(size) { generate() }
+    }
 
 }
