@@ -4,10 +4,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-@EnableConfigurationProperties(BroadcastingPlatformKafkaConfiguration::class)
+@EnableConfigurationProperties(
+    TelematicsServicesKafkaConfiguration::class,
+    BroadcastingPlatformKafkaConfiguration::class
+)
 @Configuration
 class KafkaConfiguration(
-    private val broadcastingProperties: BroadcastingPlatformKafkaConfiguration
+    private val broadcastingProperties: BroadcastingPlatformKafkaConfiguration,
+    private val telematicsServicesKafkaConfiguration: TelematicsServicesKafkaConfiguration
 ) {
 
     @Bean
@@ -32,6 +36,22 @@ class KafkaConfiguration(
         broadcastingProperties.unknownCarPositionsStream,
         broadcastingProperties.clientId,
         broadcastingProperties.autoOffsetReset
+    )
+
+    @Bean
+    fun latestCarPositionStreamConsumer() = KafkaReactiveConsumer<String, String>(
+        telematicsServicesKafkaConfiguration.bootstrapServers,
+        telematicsServicesKafkaConfiguration.latestPositionEventsStream,
+        telematicsServicesKafkaConfiguration.clientId,
+        telematicsServicesKafkaConfiguration.autoOffsetReset
+    )
+
+    @Bean
+    fun geofenceEventStreamConsumer() = KafkaReactiveConsumer<String, String>(
+        telematicsServicesKafkaConfiguration.bootstrapServers,
+        telematicsServicesKafkaConfiguration.geofenceEventsStream,
+        telematicsServicesKafkaConfiguration.clientId,
+        telematicsServicesKafkaConfiguration.autoOffsetReset
     )
 
     @Bean
