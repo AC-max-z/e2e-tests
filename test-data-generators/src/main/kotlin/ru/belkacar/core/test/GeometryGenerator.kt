@@ -97,6 +97,38 @@ class GeometryGenerator : ObjectGenerator<Geometry> {
       }
     """.trimIndent()
 
+    private val boobLick = """
+        {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [37.52706027441407, 55.755151153651255],
+                        [37.48998141699218, 55.73965922168283],
+                        [37.48311496191406, 55.712533473263065],
+                        [37.51744723730469, 55.69237066441155],
+                        [37.56139254980469, 55.68461295597482],
+                        [37.64653659277343, 55.675301665392965],
+                        [37.705588106445305, 55.69857571830571],
+                        [37.73580050878906, 55.71563451667248],
+                        [37.722067598632805, 55.75127874980543],
+                        [37.70421481542969, 55.78766410628874],
+                        [37.65477633886719, 55.7930802842255],
+                        [37.588858370117194, 55.795401271825455],
+                        [37.54353976660157, 55.78921166287346],
+                        [37.52706027441407, 55.755151153651255]
+                    ],
+                    [
+                        [37.57924533300781, 55.72493616363533],
+                        [37.58061862402344, 55.75127874980543],
+                        [37.664389375976576, 55.75747441064754],
+                        [37.67125583105469, 55.71408402587071],
+                        [37.62319064550781, 55.70555522164443],
+                        [37.57924533300781, 55.72493616363533]
+                    ]
+                ]
+            }
+    """.trimIndent()
+
     private val point = """
         {
             "type": "Point",
@@ -129,25 +161,19 @@ class GeometryGenerator : ObjectGenerator<Geometry> {
         }
     }
 
-    private var geometry: () -> Geometry = when (geometryType) {
-        GeometryType.DEFAULT -> {
-            { decodeGeoJson((defaultPolygon)) }
+    private fun getGeo(): String {
+        return when (geometryType) {
+            GeometryType.LESSER -> smallerThanDefaultPolygon
+            GeometryType.BIGGER -> biggerThanDefaultPolygon
+            GeometryType.DEFAULT -> defaultPolygon
+            GeometryType.POINT -> point
+            GeometryType.LINESTRING -> linestring
+            GeometryType.PINNED_OUT -> boobLick
         }
-
-        GeometryType.BIGGER -> {
-            { decodeGeoJson(biggerThanDefaultPolygon) }
-        }
-
-        GeometryType.LINESTRING -> {
-            { decodeGeoJson(linestring) }
-        }
-
-        GeometryType.POINT -> {
-            { decodeGeoJson(point) }
-        }
-
-        GeometryType.LESSER -> {{decodeGeoJson(smallerThanDefaultPolygon)}}
     }
+
+
+    private var geometry: () -> Geometry = { decodeGeoJson(getGeo()) }
 
     fun withType(geometryType: GeometryType) = apply { this.geometryType = geometryType }
 
@@ -157,5 +183,5 @@ class GeometryGenerator : ObjectGenerator<Geometry> {
 }
 
 enum class GeometryType {
-    DEFAULT, BIGGER, LINESTRING, POINT, LESSER
+    DEFAULT, BIGGER, LINESTRING, POINT, LESSER, PINNED_OUT
 }

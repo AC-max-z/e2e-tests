@@ -51,9 +51,11 @@ class GeofenceSteps @Autowired constructor(
     }
 
 
-    fun deleteGeofence(): DeleteGeofenceCommand.Response {
+    fun deleteGeofence(id: Geofence.Id): DeleteGeofenceCommand.Response {
         return geoCommand.deleteGeofence(
-            DeleteGeofenceCommandKt.request {  }
+            DeleteGeofenceCommandKt.request {
+                this.geofenceId = id
+            }
         )
 
     }
