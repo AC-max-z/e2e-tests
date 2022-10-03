@@ -23,7 +23,7 @@ telematics-services:
     telematics-positions-stream: ${TELEMATICS_POSITIONS_STREAM:telematics_position_events_stream}
     device-relation-history-table: ${DEVICE_REALATION_HISTORY_TABLE:device_car_relation_history}
     geofence-events-stream: ${GEOFENCE_EVENTS_STREAM:telematics_geofence_car_events}
-    latest-position-events-stream: ${LATEST_POSITION_EVENTS_STREAM:telematics_car_latest_position_events}
+    latest-position-events-stream: ${LATEST_POSITION_EVENTS_STREAM:autotests_telematics_car_latest_position_events}
 
 
 

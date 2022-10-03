@@ -1,15 +1,13 @@
-package ru.belkacar.telematics.geofence
+package ru.belkacar.core.test
 
 import org.locationtech.jts.geom.Geometry
-import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.PrecisionModel
 import org.locationtech.jts.io.geojson.GeoJsonReader
-import ru.belkacar.core.test.ObjectGenerator
 
 class GeometryGenerator : ObjectGenerator<Geometry> {
-//    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
+    //    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
+    private var geometryType: GeometryType = GeometryType.DEFAULT
 
-    private val defualtPolygon = """
+    private val defaultPolygon = """
         {
             "type": "Polygon",
             "coordinates": [
@@ -37,6 +35,66 @@ class GeometryGenerator : ObjectGenerator<Geometry> {
                 ]
                 ]
             }
+    """.trimIndent()
+
+    private val biggerThanDefaultPolygon = """
+        {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              37.254638671875,
+              55.59076338488528
+            ],
+            [
+              38.0841064453125,
+              55.59076338488528
+            ],
+            [
+              38.0841064453125,
+              55.88763544617004
+            ],
+            [
+              37.254638671875,
+              55.88763544617004
+            ],
+            [
+              37.254638671875,
+              55.59076338488528
+            ]
+          ]
+        ]
+      }
+    """.trimIndent()
+
+    private val smallerThanDefaultPolygon = """
+        {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              37.62169361114502,
+              55.75443355110991
+            ],
+            [
+              37.62993335723876,
+              55.75443355110991
+            ],
+            [
+              37.62993335723876,
+              55.75783858380449
+            ],
+            [
+              37.62169361114502,
+              55.75783858380449
+            ],
+            [
+              37.62169361114502,
+              55.75443355110991
+            ]
+          ]
+        ]
+      }
     """.trimIndent()
 
     private val point = """
@@ -71,12 +129,33 @@ class GeometryGenerator : ObjectGenerator<Geometry> {
         }
     }
 
-    private var geometry: () -> Geometry = { decodeGeoJson(defualtPolygon) }
+    private var geometry: () -> Geometry = when (geometryType) {
+        GeometryType.DEFAULT -> {
+            { decodeGeoJson((defaultPolygon)) }
+        }
 
-    fun linestring() = apply { geometry = { decodeGeoJson(linestring) } }
-    fun point() = apply { geometry = { decodeGeoJson(point) } }
+        GeometryType.BIGGER -> {
+            { decodeGeoJson(biggerThanDefaultPolygon) }
+        }
+
+        GeometryType.LINESTRING -> {
+            { decodeGeoJson(linestring) }
+        }
+
+        GeometryType.POINT -> {
+            { decodeGeoJson(point) }
+        }
+
+        GeometryType.LESSER -> {{decodeGeoJson(smallerThanDefaultPolygon)}}
+    }
+
+    fun withType(geometryType: GeometryType) = apply { this.geometryType = geometryType }
 
     override fun generate(): Geometry {
         return geometry()
     }
+}
+
+enum class GeometryType {
+    DEFAULT, BIGGER, LINESTRING, POINT, LESSER
 }

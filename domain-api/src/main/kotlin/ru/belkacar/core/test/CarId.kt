@@ -1,9 +1,16 @@
 package ru.belkacar.core.test
 
-import java.util.*
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 
-interface CarId<T> {
-    val value: T
-    data class UUIDVal(override val value: UUID) : CarId<UUID>
-    data class LongVal(override val value: Long): CarId<Long>
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@type")
+@JsonSubTypes(
+    value = [
+        JsonSubTypes.Type(UUIDVal::class)
+    ]
+)
+interface CarId {
+    val value: String
 }
+
+data class UUIDVal(override val value: String) : CarId

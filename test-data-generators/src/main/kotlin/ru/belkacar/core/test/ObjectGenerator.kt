@@ -10,22 +10,3 @@ interface ObjectGenerator<T> {
     }
 
 }
-
-inline fun <GENERATOR : ObjectGenerator<RESULT>, RESULT : Any> generatorApply(
-    inst: GENERATOR,
-    builder: GENERATOR.() -> Unit
-): RESULT {
-    return inst
-        .apply(builder)
-        .generate()
-}
-
-inline fun <GENERATOR : ObjectGenerator<RESULT>, RESULT : Any> generatorApply(
-    inst: GENERATOR,
-    size: Int,
-    builder: GENERATOR.() -> Unit
-): List<RESULT> {
-    return inst
-        .apply(builder)
-        .generateMany(size)
-}

@@ -1,18 +1,19 @@
 package ru.belkacar.core.test
 
-import java.time.LocalDateTime
+import java.time.Instant
 import java.util.*
 
-class TelematicsPositionGenerator: ObjectGenerator<TelematicsPositionEventStream> {
+class PositionGenerator: ObjectGenerator<PositionEvent> {
 
     private var deviceId = (1000..9999).random()
     private var deviceImei = UUID.randomUUID().toString()
     private var deviceSensors: List<DeviceSensor> = emptyList()
-    private var fixTime = LocalDateTime.now().toString()
+    private var fixTime = Instant.now().toString()
     private var id = System.currentTimeMillis().toInt()
     private var navigation = NavigationGenerator().generate()
-    private var serverTime = LocalDateTime.now().toString() // без мимлисекунд
+    private var serverTime = Instant.now().toString()
     private var vehicleSensors: List<VehicleSensor> = emptyList()
+    private var timestamp = System.currentTimeMillis()
 
     fun withDeviceId(id: Int) = apply  { deviceId = id }
     fun withDeviceImei(imei: String) = apply  { deviceImei = imei }
@@ -23,20 +24,21 @@ class TelematicsPositionGenerator: ObjectGenerator<TelematicsPositionEventStream
     fun withServerTime(time: String) = apply  { serverTime = time }
     fun withVehicleSensors(sensors: List<VehicleSensor>) = apply  { vehicleSensors = sensors }
 
-    override fun generate(): TelematicsPositionEventStream {
-        return TelematicsPositionEventStream(
+    override fun generate(): PositionEvent {
+        return PositionEvent(
+            id = id,
             deviceId = deviceId,
             deviceImei = deviceImei,
-            deviceSensors = deviceSensors,
-            fixTime = fixTime,
-            id = id,
+            timestamp = timestamp,
             navigation = navigation,
+            fixTime = fixTime,
             serverTime = serverTime,
-            vehicleSensors = vehicleSensors
+            vehicleSensors = vehicleSensors,
+            deviceSensors = deviceSensors
         )
     }
 
-    override fun generateMany(size: Int): List<TelematicsPositionEventStream> {
+    override fun generateMany(size: Int): List<PositionEvent> {
         return (0..size)
             .map { generate() }
     }

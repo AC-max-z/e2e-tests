@@ -59,9 +59,12 @@ class GeofenceSteps @Autowired constructor(
     }
 
 
-    fun updateGeofence(): UpdateGeofenceCommand.Response {
+    fun updateGeofence(id: Geofence.Id, geometry: Geometry): UpdateGeofenceCommand.Response {
         return geoCommand.updateGeofence(
-            UpdateGeofenceCommandKt.request {  }
+            UpdateGeofenceCommandKt.request {
+                this.geofenceId = id
+                this.geometry = geometry
+            }
         )
 
     }

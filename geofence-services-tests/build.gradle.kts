@@ -19,4 +19,5 @@ dependencies {
     testImplementation("org.springframework.kafka", "spring-kafka")
     testImplementation("io.projectreactor.kafka", "reactor-kafka")
     testImplementation("org.n52.jackson", "jackson-datatype-jts")
+    testImplementation("com.fasterxml.jackson.module", "jackson-module-kotlin")
 }
