@@ -20,7 +20,7 @@ class LocationGenerator: ObjectGenerator<Location> {
         )
     }
 
-    override fun generateMany(size: Int): List<Location> {
+    override fun generate(size: Int): List<Location> {
         return (0..size)
             .map { generate() }
     }

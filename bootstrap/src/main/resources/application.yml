@@ -1,29 +1,58 @@
-broadcasting-platform:
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:test-kafka-02.belkacar.ru:9092}
-    client-id: ${spring.application.name}
-    auto-offset-reset: ${AUTO_OFFSET_RESET:earliest}
-    car-position-stream: ${CAR_POSITION_STREAM:telematics_car_position_events}
-    unknown-car-positions-stream: ${UNKNOWN_CAR_POSITIONS_STREAM:telematics_unknown_car_position_events}
-    telematics-positions-stream: ${TELEMATICS_POSITIONS_STREAM:telematics_position_events_stream}
-    device-relation-history-table: ${DEVICE_REALATION_HISTORY_TABLE:device_car_relation_history}
+#broadcasting-platform:
+#  kafka:
+#    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:test-kafka-02.belkacar.ru:9092}
+#    client-id: ${spring.application.name}
+#    auto-offset-reset: ${AUTO_OFFSET_RESET:earliest}
+#    car-position-stream: ${CAR_POSITION_STREAM:telematics_car_position_events}
+#    unknown-car-positions-stream: ${UNKNOWN_CAR_POSITIONS_STREAM:telematics_unknown_car_position_events}
+#    telematics-positions-stream: ${TELEMATICS_POSITIONS_STREAM:telematics_position_events_stream}
+#    device-relation-history-table: ${DEVICE_REALATION_HISTORY_TABLE:device_car_relation_history}
+#
+#geofence-services:
+#  kafka:
+#    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+#    client-id: ${spring.application.name}
+#
+#telematics-services:
+#  kafka:
+#    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:test-kafka-02.belkacar.ru:9092}
+#    client-id: ${spring.application.name}
+#    auto-offset-reset: ${AUTO_OFFSET_RESET:earliest}
+#    car-position-stream: ${CAR_POSITION_STREAM:telematics_car_position_events}
+#    unknown-car-positions-stream: ${UNKNOWN_CAR_POSITIONS_STREAM:telematics_unknown_car_position_events}
+#    telematics-positions-stream: ${TELEMATICS_POSITIONS_STREAM:telematics_position_events_stream}
+#    device-relation-history-table: ${DEVICE_REALATION_HISTORY_TABLE:device_car_relation_history}
+#    geofence-events-stream: ${GEOFENCE_EVENTS_STREAM:telematics_geofence_car_events}
+#    latest-position-events-stream: ${LATEST_POSITION_EVENTS_STREAM:autotests_telematics_car_latest_position_events}
 
-geofence-services:
+spring:
+  application:
+    name: telematics-e2e-tests
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-    client-id: ${spring.application.name}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:test-kafka-01.belkacar.ru:9092,test-kafka-02.belkacar.ru:9092,test-kafka-03.belkacar.ru:9092}
+    consumer:
+      group-id: ${spring.application.name}
 
-telematics-services:
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:test-kafka-02.belkacar.ru:9092}
-    client-id: ${spring.application.name}
-    auto-offset-reset: ${AUTO_OFFSET_RESET:earliest}
-    car-position-stream: ${CAR_POSITION_STREAM:telematics_car_position_events}
-    unknown-car-positions-stream: ${UNKNOWN_CAR_POSITIONS_STREAM:telematics_unknown_car_position_events}
-    telematics-positions-stream: ${TELEMATICS_POSITIONS_STREAM:telematics_position_events_stream}
-    device-relation-history-table: ${DEVICE_REALATION_HISTORY_TABLE:device_car_relation_history}
-    geofence-events-stream: ${GEOFENCE_EVENTS_STREAM:telematics_geofence_car_events}
-    latest-position-events-stream: ${LATEST_POSITION_EVENTS_STREAM:autotests_telematics_car_latest_position_events}
+telematics:
+  communication:
+    grpc:
+      host: "test-telematics.belkacar.ru"
+      port: 6565
+  geofence-manager:
+    geofence-events-topic: ""
+    geohash-commands-topic: ""
+    geohash-table-topic: ""
+    car-geofence-events-topic: ${GEOFENCE_EVENTS_STREAM:telematics_car_geofence_events}
+  telematics-core:
+    positions-topic: ""
+    device-events-topic: ""
+    vehicle-events-topic: ""
+  broadcasting-platform:
+    car-positions-topic: ${CAR_POSITION_STREAM:telematics_car_position_events}
+    unknown-car-positions-topic: ${UNKNOWN_CAR_POSITIONS_STREAM:telematics_unknown_car_position_events}
+    latest-car-positions-topic: ${LATEST_POSITION_EVENTS_STREAM:telematics_car_latest_position_events}
+    device-relation-history-table: ${DEVICE_RELATION_HISTORY_TABLE:device_car_relation_history}
+
 
 
 
@@ -34,3 +63,4 @@ telematics-services:
 #      "TELEMATICS_POSITIONS_STREAM": "telematics_position_events_stream",
 #      "DEVICE_RELATION_HISTORY_TABLE": "device_car_relation_history",
 #      "UNKNOWN_CAR_POSITIONS_STREAM": "telematics_unknown_car_position_events"
+

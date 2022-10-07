@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 
 @ConfigurationPropertiesScan
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = ["ru.belkacar.core", "ru.belkacar.telematics"])
 class Application
 
 fun main(args: Array<String>) {

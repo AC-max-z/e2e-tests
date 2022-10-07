@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 
+@Deprecated("")
 data class GeofenceCarEvent(
     val id: String,
-    val carId: CarId,
+    val carId: CarId<*>,
     val timestamp: String,
     val payload: GeofenceEventPayload
 )
@@ -18,11 +19,13 @@ data class GeofenceCarEvent(
         JsonSubTypes.Type(CarLeavedGeofence::class)
     ]
 )
+@Deprecated("")
 interface GeofenceEventPayload {
-    val carId: CarId
+    val carId: CarId<*>
     val geofence: Geofence
 }
 
+@Deprecated("")
 data class Geofence(
     val id: GeofenceId,
     val type: GeofenceType,
@@ -30,11 +33,15 @@ data class Geofence(
     val attributes: Any
 )
 
+@Deprecated("")
 data class GeofenceId(val value: String)
 
+@Deprecated("")
 data class GeofenceType(val value: String)
 
-data class CarEnteredGeofence(override val carId: CarId, override val geofence: Geofence) : GeofenceEventPayload
+@Deprecated("")
+data class CarEnteredGeofence(override val carId: CarId<*>, override val geofence: Geofence) : GeofenceEventPayload
 
-data class CarLeavedGeofence(override val carId: CarId, override val geofence: Geofence) : GeofenceEventPayload
+@Deprecated("")
+data class CarLeavedGeofence(override val carId: CarId<*>, override val geofence: Geofence) : GeofenceEventPayload
 
