@@ -34,6 +34,16 @@ class GeofencesKafkaOperations(
                 .receiveAutoAck()
                 .concatMap { it }
         }
+
+        fun consumeGeofenceDetectorState(): Flux<ConsumerRecord<String, GeofenceDetectorKafkaState>> {
+            return kafkaConsumerBuilder.create<GeofenceDetectorKafkaState>()
+                .withValueType(GeofenceDetectorKafkaState::class.java)
+                .withOffsetResetPolicy(KafkaConsumerBuilder.OffsetResetPolicy.earliest)
+                .withTopic(telematicsPlatformProperties.geofenceManager.geofencesDetectorStateTable)
+                .build()
+                .receiveAutoAck()
+                .concatMap { it }
+        }
     }
     
     

@@ -71,6 +71,8 @@ class KafkaConsumerBuilder(
                 .withKeyDeserializer(this@Builder.keyDeserializer())
                 .withValueDeserializer(this@Builder.valueDeserializer())
                 .consumerProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, offsetResetPolicy().toString())
+                .consumerProperty(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG, "60000")
+                .consumerProperty(ConsumerConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, "600000")
                 .subscription(Collections.singleton(topicName))
             
             return KafkaReceiver.create(options)

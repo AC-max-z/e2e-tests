@@ -42,7 +42,8 @@ telematics:
     geofence-events-topic: ""
     geohash-commands-topic: ""
     geohash-table-topic: ""
-    car-geofence-events-topic: ${GEOFENCE_EVENTS_STREAM:telematics_car_geofence_events}
+    car-geofence-events-topic: ${GEOFENCE_EVENTS_STREAM:telematics_geofence_car_events}
+    geofences-detector-state-table: ${GEOFENCE_DETECTOR_STATE:telematics_geofences_detector_state_table}
   telematics-core:
     positions-topic: ""
     device-events-topic: ""

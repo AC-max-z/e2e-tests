@@ -3,7 +3,7 @@ dependencies {
 //    testImplementation(project(":kafka"))
     testImplementation(project(":test-data-generators"))
 //    testImplementation(project(":domain-api"))
-//    testImplementation(project(":grpc"))
+    testImplementation(project(":grpc"))
     
     testImplementation(project(":geofencing"))
     testImplementation(project(":broadcasting-platform"))
