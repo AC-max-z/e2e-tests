@@ -44,6 +44,16 @@ class GeofencesKafkaOperations(
                 .receiveAutoAck()
                 .concatMap { it }
         }
+
+        fun consumeGeohashProcessorCommands(): Flux<ConsumerRecord<String, GeofenceHashPreprocessorCommand>> {
+            return kafkaConsumerBuilder.create<GeofenceHashPreprocessorCommand>()
+                .withValueType(GeofenceHashPreprocessorCommand::class.java)
+                .withOffsetResetPolicy(KafkaConsumerBuilder.OffsetResetPolicy.earliest)
+                .withTopic(telematicsPlatformProperties.geofenceManager.geohashPreprocessorCommands)
+                .build()
+                .receiveAutoAck()
+                .concatMap { it }
+        }
     }
     
     

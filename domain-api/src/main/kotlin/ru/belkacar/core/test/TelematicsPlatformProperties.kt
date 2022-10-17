@@ -27,6 +27,7 @@ data class TelematicsPlatformProperties(
         val geohashCommandsTopic: String,
         val geohashTableTopic: String,
         val carGeofenceEventsTopic: String,
-        val geofencesDetectorStateTable: String
+        val geofencesDetectorStateTable: String,
+        val geohashPreprocessorCommands: String
     )
 }
