@@ -8,6 +8,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.21" apply false
     kotlin("plugin.spring") version "1.6.21" apply false
+    kotlin("kapt") version "1.6.21" apply false
     id("io.qameta.allure") version "2.9.6" apply false
     id("com.google.protobuf") version "0.8.17" apply false
     idea
@@ -22,6 +23,7 @@ subprojects {
         plugin("io.spring.dependency-management")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("org.jetbrains.kotlin.kapt")
         plugin("io.qameta.allure")
         plugin("idea")
     }

@@ -1,9 +1,13 @@
 dependencies {
-    testImplementation(project(":bootstrap"))
-    testImplementation(project(":kafka"))
+    implementation(project(":bootstrap"))
+//    testImplementation(project(":kafka"))
     testImplementation(project(":test-data-generators"))
-    testImplementation(project(":domain-api"))
+//    testImplementation(project(":domain-api"))
     testImplementation(project(":grpc"))
+    
+    testImplementation(project(":geofencing"))
+    testImplementation(project(":broadcasting-platform"))
+    
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
@@ -19,4 +23,5 @@ dependencies {
     testImplementation("org.springframework.kafka", "spring-kafka")
     testImplementation("io.projectreactor.kafka", "reactor-kafka")
     testImplementation("org.n52.jackson", "jackson-datatype-jts")
+    testImplementation("com.fasterxml.jackson.module", "jackson-module-kotlin")
 }

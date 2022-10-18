@@ -5,57 +5,60 @@ plugins {
 }
 
 dependencies {
-    protobuf("proto.belka.telematics.geofences:telematics-geofences-ops-proto")
-    compileOnly("com.google.protobuf", "protobuf-java")
-    compileOnly("com.google.protobuf", "protobuf-kotlin")
+//    protobuf("proto.belka.telematics.geofences:telematics-geofences-ops-proto")
+    api("com.google.protobuf", "protobuf-java")
+    api("com.google.protobuf", "protobuf-kotlin")
     api("io.grpc", "grpc-protobuf")
     api("io.grpc", "grpc-kotlin-stub")
     api("io.grpc","grpc-stub")
     implementation("io.grpc:grpc-netty-shaded")
+    
+//    api("org.jetbrains.kotlinx", "kotlinx-coroutines-reactor")
 
     compileOnly("org.springframework", "spring-context")
 
-    testImplementation("ru.belkacar.core.test.tools", "reactor-allure-extentions")
-    testImplementation("ru.belkacar.core.test.tools", "allure-annotations")
+//    testImplementation("ru.belkacar.core.test.tools", "reactor-allure-extentions")
+//    testImplementation("ru.belkacar.core.test.tools", "allure-annotations")
 }
 
-sourceSets {
-    main {
-        proto {
-            srcDirs("src/main")
-        }
-    }
-}
-
-protobuf {
-    val protobufVersion: String by rootProject.extra
-    val grpcVersion: String by rootProject.extra
-    val grpcKotlinVersion: String by rootProject.extra
-
-    protoc {
-        artifact = "com.google.protobuf:protoc:$protobufVersion"
-    }
-
-    plugins {
-        id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
-        }
-
-        id("grpckt") {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk7@jar"
-        }
-    }
-
-    generateProtoTasks {
-        all().forEach {
-            it.builtins {
-                id("kotlin") // generates kotlin DLS for given .proto
-                // proto files generated to Java as usual, Kotlin used for inline builders for more clean code
-            }
-
-            it.plugins {
-                id("grpc") // used for well known rpc services generation
-            }
-        }
-    }
-}
+//sourceSets {
+//    main {
+//        proto {
+//            srcDirs("src/main")
+//        }
+//    }
+//}
+//
+//protobuf {
+//    val protobufVersion: String by rootProject.extra
+//    val grpcVersion: String by rootProject.extra
+//    val grpcKotlinVersion: String by rootProject.extra
+//
+//    protoc {
+//        artifact = "com.google.protobuf:protoc:$protobufVersion"
+//    }
+//
+//    plugins {
+//        id("grpc") {
+//            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+//        }
+//
+//        id("grpckt") {
+//            artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar"
+//        }
+//    }
+//
+//    generateProtoTasks {
+//        all().forEach {
+//            it.builtins {
+//                id("kotlin") // generates kotlin DLS for given .proto
+//                // proto files generated to Java as usual, Kotlin used for inline builders for more clean code
+//            }
+//
+//            it.plugins {
+//                id("grpc") // used for well known rpc services generation
+//                id("grpckt")
+//            }
+//        }
+//    }
+//}

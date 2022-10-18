@@ -10,7 +10,7 @@ class LocationGenerator: ObjectGenerator<Location> {
     private var latitude = df.parse(df.format(56.0 + (57.9 - 56.0) * Random().nextDouble())) as Double
     private var longitude = df.parse(df.format(64.0 + (65.9 - 64.0) * Random().nextDouble())) as Double
 
-    fun withLantitude(value: Double) = also { latitude = value }
+    fun withLatitude(value: Double) = also { latitude = value }
     fun withLongitude(value: Double) = also { longitude = value }
 
     override fun generate(): Location {
@@ -20,7 +20,7 @@ class LocationGenerator: ObjectGenerator<Location> {
         )
     }
 
-    override fun generateMany(size: Int): List<Location> {
+    override fun generate(size: Int): List<Location> {
         return (0..size)
             .map { generate() }
     }
