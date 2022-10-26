@@ -11,7 +11,12 @@ plugins {
     kotlin("kapt") version "1.6.21" apply false
     id("io.qameta.allure") version "2.9.6" apply false
     id("com.google.protobuf") version "0.8.17" apply false
+    id("io.qameta.allure-aggregate-report") version "2.9.6"
     idea
+}
+
+repositories {
+    mavenCentral()
 }
 
 val protobufVersion by extra { "3.21.1" }
@@ -50,7 +55,7 @@ subprojects {
             mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.2")
         }
-        dependencies{
+        dependencies {
             /* platform and language dependencies */
             dependency("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.2")
 
@@ -80,36 +85,55 @@ subprojects {
             dependency("io.github.serpro69:kotlin-faker:1.11.0")
         }
     }
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn")
-            sourceCompatibility = "11"
-            jvmTarget = "11"
-        }
-    }
 
-    tasks.withType<Test> {
-        doFirst {
-            systemProperty("allure.label.service", rootProject.name)
-            systemProperty("allure.label.service-group", "e2e-tests")
-            systemProperty("allure.results.directory", "${rootProject.projectDir}/allure-results")
+    tasks {
+        withType<KotlinCompile> {
+            kotlinOptions {
+                freeCompilerArgs = listOf("-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn")
+                sourceCompatibility = "11"
+                jvmTarget = "11"
+            }
         }
-        testLogging {
-            showExceptions = true
-            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-            showCauses = true
-            showStackTraces = true
-            showStandardStreams = true
-            outputs.upToDateWhen {false}
-        }
-    }
 
-    tasks.register("e2e-tests", Test::class.java) {
-        doFirst {
-            systemProperty("spring.profiles.active", "e2e-tests")
+        withType<Test> {
+            doFirst {
+                systemProperty("allure.label.service", rootProject.name)
+                systemProperty("allure.label.service-group", "e2e-tests")
+            }
+            testLogging {
+                showExceptions = true
+                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                showCauses = true
+                showStackTraces = true
+                showStandardStreams = true
+                outputs.upToDateWhen { false }
+            }
         }
-        useJUnitPlatform {
-            includeTags("e2e")
+
+        withType(Test::class.java).configureEach {
+            val iTags = System.getProperty("includeTags")
+            val eTags = System.getProperty("excludeTags")
+            useJUnitPlatform {
+                if (!iTags.isNullOrEmpty()) {
+                    includeTags(iTags)
+                } else if (!eTags.isNullOrEmpty()) {
+                    excludeTags(eTags)
+                }
+            }
+        }
+
+        register("e2e-tests", Test::class.java) {
+            doFirst {
+                systemProperty("spring.profiles.active", "e2e-tests")
+            }
+            useJUnitPlatform {
+                includeTags("e2e")
+            }
+        }
+
+        register<Delete>("deleteAllureStuff") {
+            delete("${projectDir.path}/build/allure-results")
+            delete("${projectDir.path}/build/reports")
         }
     }
 

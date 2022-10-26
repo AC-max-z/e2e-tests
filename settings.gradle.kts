@@ -9,5 +9,6 @@ include(
     ":domain-api",
     ":grpc",
     ":geofencing",
-    ":geofence-services-tests"
+    ":geofence-services-tests",
+    ":test-annotations"
 )

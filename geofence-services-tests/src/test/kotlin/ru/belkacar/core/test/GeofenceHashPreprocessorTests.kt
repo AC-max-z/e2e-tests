@@ -7,22 +7,20 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import proto.belka.telematics.geofence.v1.CreateGeofenceCommandKt
+import proto.belka.telematics.geofence.v1.UpdateGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.DeleteGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.type.GeofenceTypeKt
-import ru.belkacar.core.test.tools.E2E
 import ru.belkacar.core.test.tools.JiraIssues
 import proto.belka.telematics.geofence.v1.Geofence
-import proto.belka.telematics.geofence.v1.UpdateGeofenceCommandKt
 import reactor.kotlin.test.test
 import ru.belkacar.core.test.tools.assertNextStep
 import ru.belkacar.telematics.geofence.*
-import ru.belkacar.telematics.geofence.CarEnteredGeofence
 import java.time.Duration
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
-@E2E
 @SpringBootTest
+@GeofenceServices
+@HashPreprocessor
 class GeofenceHashPreprocessorTests @Autowired constructor(
     private val geofenceGrpcOperations: GeofencesGrpcOperations,
     private val geofenceKafkaOperations: GeofencesKafkaOperations,
@@ -30,6 +28,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     val faker = FakerProvider.faker
 
     @Test
+    @ComponentTest
     @AllureId("")
     @JiraIssues("")
     fun `should do something on geofence create`() {
@@ -71,6 +70,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @Test
+    @ComponentTest
     @AllureId("")
     @JiraIssues("")
     fun `should do something on geofence update`() {
@@ -127,6 +127,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @Test
+    @ComponentTest
     @AllureId("")
     @JiraIssues("")
     fun `should do something on geofence delete`() {
