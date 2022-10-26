@@ -28,7 +28,8 @@ import kotlin.test.assertIs
 const val CONSUMER_TIMEOUT_MS = 55_000L
 
 @SpringBootTest
-@GeofenceServices
+@ServiceGroup("geofence-services")
+@Service("Detector")
 @Detector
 class GeofenceDetectorTests @Autowired constructor(
     private val geofenceGrpcOperations: GeofencesGrpcOperations,

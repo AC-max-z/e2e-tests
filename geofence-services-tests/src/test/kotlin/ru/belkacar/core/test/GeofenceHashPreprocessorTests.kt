@@ -1,7 +1,6 @@
 package ru.belkacar.core.test
 
 import com.google.protobuf.StringValue
-import ru.belkacar.core.test.tools.step
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,16 +9,18 @@ import proto.belka.telematics.geofence.v1.CreateGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.UpdateGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.DeleteGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.type.GeofenceTypeKt
-import ru.belkacar.core.test.tools.JiraIssues
 import proto.belka.telematics.geofence.v1.Geofence
 import reactor.kotlin.test.test
+import ru.belkacar.core.test.tools.JiraIssues
 import ru.belkacar.core.test.tools.assertNextStep
+import ru.belkacar.core.test.tools.step
 import ru.belkacar.telematics.geofence.*
 import java.time.Duration
 import kotlin.test.assertEquals
 
 @SpringBootTest
-@GeofenceServices
+@ServiceGroup("geofence-services")
+@Service("telematics-geofences-hash-preprocessor")
 @HashPreprocessor
 class GeofenceHashPreprocessorTests @Autowired constructor(
     private val geofenceGrpcOperations: GeofencesGrpcOperations,

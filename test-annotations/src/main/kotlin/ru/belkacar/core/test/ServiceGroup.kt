@@ -1,13 +1,13 @@
 package ru.belkacar.core.test
 
-import org.junit.jupiter.api.Tag
+import io.qameta.allure.LabelAnnotation
+import java.lang.annotation.Inherited
 
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
-@Tag("geofence-services")
-annotation class GeofenceServices()
 
+// TODO: move me to
+//  https://gitlab.belkacar.ru/java-backend/allure-test-tools
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Inherited
 @Retention(AnnotationRetention.RUNTIME)
-@Tag("broadcasting-services")
-annotation class BroadcastingPlatform()
+@LabelAnnotation(name = "service-group")
+annotation class ServiceGroup(val value: String)

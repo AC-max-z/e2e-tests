@@ -97,8 +97,7 @@ subprojects {
 
         withType<Test> {
             doFirst {
-                systemProperty("allure.label.service", rootProject.name)
-                systemProperty("allure.label.service-group", "e2e-tests")
+                systemProperty("allure.results.directory", "${rootProject.projectDir}/allure-results")
             }
             testLogging {
                 showExceptions = true
@@ -119,6 +118,30 @@ subprojects {
                 } else if (!eTags.isNullOrEmpty()) {
                     excludeTags(eTags)
                 }
+            }
+        }
+
+        register("geofence-tests", Test::class.java) {
+            useJUnitPlatform {
+                includeTags("geofence-services")
+            }
+        }
+
+        register("broadcasting-tests", Test::class.java) {
+            useJUnitPlatform {
+                includeTags("broadcasting-services")
+            }
+        }
+
+        register("detector-tests", Test::class.java) {
+            useJUnitPlatform {
+                includeTags("detector")
+            }
+        }
+
+        register("hash-preprocessor-tests", Test::class.java) {
+            useJUnitPlatform {
+                includeTags("hash-preprocessor")
             }
         }
 
