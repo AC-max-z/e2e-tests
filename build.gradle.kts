@@ -11,12 +11,7 @@ plugins {
     kotlin("kapt") version "1.6.21" apply false
     id("io.qameta.allure") version "2.9.6" apply false
     id("com.google.protobuf") version "0.8.17" apply false
-    id("io.qameta.allure-aggregate-report") version "2.9.6"
     idea
-}
-
-repositories {
-    mavenCentral()
 }
 
 val protobufVersion by extra { "3.21.1" }
