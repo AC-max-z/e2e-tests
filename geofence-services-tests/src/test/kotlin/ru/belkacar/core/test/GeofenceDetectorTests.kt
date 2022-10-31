@@ -12,6 +12,7 @@ import proto.belka.telematics.geofence.v1.Geofence
 import proto.belka.telematics.geofence.v1.UpdateGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.type.GeofenceTypeKt
 import reactor.kotlin.test.test
+import ru.belkacar.core.test.tools.E2E
 import ru.belkacar.core.test.tools.JiraIssues
 import ru.belkacar.core.test.tools.assertNextStep
 import ru.belkacar.core.test.tools.step
@@ -28,6 +29,7 @@ import kotlin.test.assertIs
 const val CONSUMER_TIMEOUT_MS = 55_000L
 
 @SpringBootTest
+@E2E
 @ServiceGroup("geofence-services")
 @Service("Detector")
 @Detector
@@ -48,7 +50,6 @@ class GeofenceDetectorTests @Autowired constructor(
 
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @ComponentTest
     @AllureId("7692")
     @JiraIssues("TEL-565", "TEL-767")
     fun `should create enter geofence event on entering polygon`(zoneKey: String) {
@@ -161,7 +162,6 @@ class GeofenceDetectorTests @Autowired constructor(
 
     @ParameterizedTest
     @ValueSource(strings = ["police_impound", "driving_zone"])
-    @ComponentTest
     @AllureId("7711")
     @JiraIssues("TEL-565", "TEL-767")
     fun `the first event from a car that is not located in any of the geofences`(zoneKey: String) {
@@ -255,7 +255,6 @@ class GeofenceDetectorTests @Autowired constructor(
 
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @ComponentTest
     @AllureId("7693")
     @JiraIssues("TEL-565", "TEL-767")
     fun `should create leave geofence event on leaving polygon`(zoneKey: String) {
@@ -370,7 +369,6 @@ class GeofenceDetectorTests @Autowired constructor(
 
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @ComponentTest
     @AllureId("7708")
     @JiraIssues("TEL-565", "TEL-767")
     fun `should create enter geofence event after increasing polygon`(zoneKey: String) {
@@ -492,7 +490,6 @@ class GeofenceDetectorTests @Autowired constructor(
 
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @ComponentTest
     @AllureId("7709")
     @JiraIssues("TEL-565", "TEL-767")
     fun `should create leave geofence event after decreasing polygon`(zoneKey: String) {
@@ -611,7 +608,6 @@ class GeofenceDetectorTests @Autowired constructor(
 
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @ComponentTest
     @AllureId("9401")
     @JiraIssues("TEL-565", "TEL-767")
     fun `should create leave geofence event after geofence deletion`(zoneKey: String) {
@@ -726,7 +722,6 @@ class GeofenceDetectorTests @Autowired constructor(
     }
 
     @Test
-    @ComponentTest
     @AllureId("9402")
     @JiraIssues("TEL-565", "TEL-767")
     fun `should create enter event for embedded geofence`() {
@@ -1038,7 +1033,6 @@ class GeofenceDetectorTests @Autowired constructor(
     }
 
     @Test
-    @ComponentTest
     @AllureId("9403")
     @JiraIssues("TEL-565", "TEL-767")
     fun `should create enter event for pinned out geofence`() {
