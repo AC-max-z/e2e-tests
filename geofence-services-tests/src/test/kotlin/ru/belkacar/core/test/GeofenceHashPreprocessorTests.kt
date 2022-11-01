@@ -3,6 +3,7 @@ package ru.belkacar.core.test
 import com.google.protobuf.StringValue
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,7 +44,8 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("")
     @JiraIssues("")
-    fun `should do something on geofence create`(zoneKey: String) {
+    @DisplayName("Should produce AddGeofence command on geofence create")
+    fun addGeofenceCommandOnCreation(zoneKey: String) {
         val geofence = step<Geofence>("Create new geofence") {
             geofenceHelpers.createGeofence(zoneKey)!!
         }
@@ -74,7 +76,8 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("")
     @JiraIssues("")
-    fun `should do something on geofence update`(zoneKey: String) {
+    @DisplayName("Should produce UpdateGeofence command on geofence update")
+    fun updateGeofenceCommandOnUpdate(zoneKey: String) {
         val newDesc = "Autotests updated description ${faker.bojackHorseman.quotes()}"
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -120,6 +123,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @JiraIssues("")
+    @DisplayName("Should produce RemoveGeofence command on geofence delete")
     fun `should do something on geofence delete`(zoneKey: String) {
         val geofence = step<Geofence>("Create new geofence") {
             geofenceHelpers.createGeofence(zoneKey)!!

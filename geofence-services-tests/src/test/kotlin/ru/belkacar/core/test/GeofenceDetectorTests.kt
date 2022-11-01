@@ -2,6 +2,7 @@ package ru.belkacar.core.test
 
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -39,7 +40,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7692")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `should create enter geofence event on entering polygon`(zoneKey: String) {
+    @DisplayName("Should create enter geofence event on entering polygon")
+    fun enterEventOnEnterPolygon(zoneKey: String) {
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -74,7 +76,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @ValueSource(strings = ["police_impound", "driving_zone"])
     @AllureId("7711")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `the first event from a car that is not located in any of the geofences`(zoneKey: String) {
+    @DisplayName("Should create enter geofence event on first event inside polygon")
+    fun enterEventOnFirstEventInsidePolygon(zoneKey: String) {
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -102,7 +105,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7693")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `should create leave geofence event on leaving polygon`(zoneKey: String) {
+    @DisplayName("Should create leave geofence event on leaving polygon")
+    fun leaveEventOnExitPolygon(zoneKey: String) {
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -134,7 +138,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7708")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `should create enter geofence event after increasing polygon`(zoneKey: String) {
+    @DisplayName("should create enter geofence event after increasing polygon")
+    fun enterEventOnIncreasingPolygon(zoneKey: String) {
         val carId = generateCarId { }
         val updatedPolygon = GeometryGenerator().withType(GeometryType.BIGGER).generate()
 
@@ -180,7 +185,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7709")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `should create leave geofence event after decreasing polygon`(zoneKey: String) {
+    @DisplayName("Should create leave geofence event after decreasing polygon")
+    fun leaveEventOnDecreasingPolygon(zoneKey: String) {
         val carId = generateCarId { }
         val updatedPolygon = GeometryGenerator().withType(GeometryType.LESSER).generate()
 
@@ -226,7 +232,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9401")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `should create leave geofence event after geofence deletion`(zoneKey: String) {
+    @DisplayName("Should create leave geofence event after geofence deletion")
+    fun leaveEventOnDeletingPolygon(zoneKey: String) {
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence (default)") {
@@ -267,7 +274,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @Test
     @AllureId("9402")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `should create enter event for embedded geofence`() {
+    @DisplayName("Should create enter event for embedded geofence")
+    fun enterEventForEmbeddedPolygon() {
         val carId = generateCarId { }
         val zoneKey = "driving_zone"
 
@@ -332,7 +340,8 @@ class GeofenceDetectorTests @Autowired constructor(
     @Test
     @AllureId("9403")
     @JiraIssues("TEL-565", "TEL-767")
-    fun `should create enter event for pinned out geofence`() {
+    @DisplayName("Should create enter event for pinned out geofence")
+    fun enterEventForPinnedOutPolygon() {
         val carId = generateCarId { }
         val zoneKey = "driving_zone"
 
