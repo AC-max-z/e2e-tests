@@ -2,7 +2,10 @@ package ru.belkacar.core.test
 
 import com.google.protobuf.StringValue
 import io.qameta.allure.AllureId
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import proto.belka.telematics.geofence.v1.CreateGeofenceCommandKt
@@ -12,11 +15,18 @@ import proto.belka.telematics.geofence.v1.type.GeofenceTypeKt
 import proto.belka.telematics.geofence.v1.Geofence
 import reactor.kotlin.test.test
 import ru.belkacar.core.test.tools.JiraIssues
+import proto.belka.telematics.geofence.v1.UpdateGeofenceCommandKt
+import reactor.core.publisher.Mono.delay
+import reactor.kotlin.test.test
+import ru.belkacar.core.GeofenceHelpers
 import ru.belkacar.core.test.tools.assertNextStep
 import ru.belkacar.core.test.tools.step
 import ru.belkacar.telematics.geofence.*
 import java.time.Duration
 import kotlin.test.assertEquals
+
+const val CONSUMER_TIMEOUT_MS = 10_000L
+const val DELAY_VERIFICATION_MS = 2_000L
 
 @SpringBootTest
 @ServiceGroup("geofence-services")
@@ -25,28 +35,22 @@ import kotlin.test.assertEquals
 class GeofenceHashPreprocessorTests @Autowired constructor(
     private val geofenceGrpcOperations: GeofencesGrpcOperations,
     private val geofenceKafkaOperations: GeofencesKafkaOperations,
+    private val geofenceHelpers: GeofenceHelpers
 ) {
     val faker = FakerProvider.faker
+    @AfterEach
+    fun cleanup() {
+        geofenceHelpers.deleteAllGeofencesByOwner()
+    }
 
-    @Test
     @ComponentTest
+    @ParameterizedTest
+    @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("")
     @JiraIssues("")
-    fun `should do something on geofence create`() {
-        val polygon = GeometryGenerator().generate()
-
+    fun `should do something on geofence create`(zoneKey: String) {
         val geofence = step<Geofence>("Create new geofence") {
-            geofenceGrpcOperations.geofenceOps
-                .create(
-                    CreateGeofenceCommandKt.request {
-                        geofenceTypeKey = GeofenceTypeKt.key { value = "driving_zone" }
-                        description = "Autotests ${faker.backToTheFuture.quotes()}"
-                        restriction = Geofence.Restriction.OWNER
-                        geometry = polygon.toProto()
-                    }
-                )
-                .map { it.geofence }
-                .block()!!
+            geofenceHelpers.createGeofence(zoneKey)!!
         }
 
         step("New add geofence command") {
@@ -70,26 +74,16 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
 
     }
 
-    @Test
     @ComponentTest
+    @ParameterizedTest
+    @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("")
     @JiraIssues("")
-    fun `should do something on geofence update`() {
-        val polygon = GeometryGenerator().generate()
-        val newDesc = "Autotests ${faker.bojackHorseman.quotes()}"
+    fun `should do something on geofence update`(zoneKey: String) {
+        val newDesc = "Autotests updated description ${faker.bojackHorseman.quotes()}"
 
         val geofence = step<Geofence>("Create new geofence") {
-            geofenceGrpcOperations.geofenceOps
-                .create(
-                    CreateGeofenceCommandKt.request {
-                        geofenceTypeKey = GeofenceTypeKt.key { value = "driving_zone" }
-                        description = "Autotests ${faker.backToTheFuture.quotes()}"
-                        restriction = Geofence.Restriction.OWNER
-                        geometry = polygon.toProto()
-                    }
-                )
-                .map { it.geofence }
-                .block()!!
+            geofenceHelpers.createGeofence(zoneKey)!!
         }
 
         step("Update geofence") {
@@ -102,8 +96,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
                 )
                 .map { it.geofence }
                 .block()!!
-            // solution? (wait for update)
-            Thread.sleep(5_000)
+            delay(Duration.ofMillis(DELAY_VERIFICATION_MS)).block()!!
         }
 
         step("New update geofence command") {
@@ -127,25 +120,14 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
 
     }
 
-    @Test
     @ComponentTest
     @AllureId("")
+    @ParameterizedTest
+    @ValueSource(strings = ["driving_zone", "police_impound"])
     @JiraIssues("")
-    fun `should do something on geofence delete`() {
-        val polygon = GeometryGenerator().generate()
-
+    fun `should do something on geofence delete`(zoneKey: String) {
         val geofence = step<Geofence>("Create new geofence") {
-            geofenceGrpcOperations.geofenceOps
-                .create(
-                    CreateGeofenceCommandKt.request {
-                        geofenceTypeKey = GeofenceTypeKt.key { value = "driving_zone" }
-                        description = "Autotests ${faker.backToTheFuture.quotes()}"
-                        restriction = Geofence.Restriction.OWNER
-                        geometry = polygon.toProto()
-                    }
-                )
-                .map { it.geofence }
-                .block()!!
+            geofenceHelpers.createGeofence(zoneKey)!!
         }
 
         step("Delete geofence") {
@@ -157,8 +139,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
                 )
                 .map { it }
                 .block()!!
-            // solution? (wait for update)
-            Thread.sleep(5_000)
+            delay(Duration.ofMillis(DELAY_VERIFICATION_MS)).block()!!
         }
 
         step("New remove geofence command") {

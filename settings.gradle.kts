@@ -10,5 +10,7 @@ include(
     ":grpc",
     ":geofencing",
     ":geofence-services-tests",
-    ":test-annotations"
+    ":test-annotations",
+    ":test-matchers",
+    ":test-helpers"
 )
