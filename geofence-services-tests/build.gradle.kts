@@ -7,6 +7,7 @@ dependencies {
     
     testImplementation(project(":geofencing"))
     testImplementation(project(":broadcasting-platform"))
+    testImplementation(project(":test-annotations"))
     testImplementation(project(":test-matchers"))
     testImplementation(project(":test-helpers"))
     

@@ -1,7 +1,6 @@
 package ru.belkacar.core.test
 
 import com.google.protobuf.StringValue
-import ru.belkacar.core.test.tools.step
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -10,16 +9,18 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import proto.belka.telematics.geofence.v1.CreateGeofenceCommandKt
+import proto.belka.telematics.geofence.v1.UpdateGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.DeleteGeofenceCommandKt
 import proto.belka.telematics.geofence.v1.type.GeofenceTypeKt
-import ru.belkacar.core.test.tools.E2E
-import ru.belkacar.core.test.tools.JiraIssues
 import proto.belka.telematics.geofence.v1.Geofence
+import reactor.kotlin.test.test
+import ru.belkacar.core.test.tools.JiraIssues
 import proto.belka.telematics.geofence.v1.UpdateGeofenceCommandKt
 import reactor.core.publisher.Mono.delay
 import reactor.kotlin.test.test
 import ru.belkacar.core.GeofenceHelpers
 import ru.belkacar.core.test.tools.assertNextStep
+import ru.belkacar.core.test.tools.step
 import ru.belkacar.telematics.geofence.*
 import java.time.Duration
 import kotlin.test.assertEquals
@@ -27,8 +28,10 @@ import kotlin.test.assertEquals
 const val CONSUMER_TIMEOUT_MS = 10_000L
 const val DELAY_VERIFICATION_MS = 2_000L
 
-@E2E
 @SpringBootTest
+@ServiceGroup("geofence-services")
+@Service("telematics-geofences-hash-preprocessor")
+@HashPreprocessor
 class GeofenceHashPreprocessorTests @Autowired constructor(
     private val geofenceGrpcOperations: GeofencesGrpcOperations,
     private val geofenceKafkaOperations: GeofencesKafkaOperations,
@@ -40,6 +43,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
         geofenceHelpers.deleteAllGeofencesByOwner()
     }
 
+    @ComponentTest
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("")
@@ -70,6 +74,7 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
 
     }
 
+    @ComponentTest
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("")
@@ -115,6 +120,8 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
 
     }
 
+    @ComponentTest
+    @AllureId("")
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @JiraIssues("")

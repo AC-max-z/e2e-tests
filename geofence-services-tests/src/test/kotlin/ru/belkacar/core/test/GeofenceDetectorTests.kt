@@ -20,8 +20,11 @@ import ru.belkacar.telematics.geofence.CarLeavedGeofence
 import ru.belkacar.telematics.geofence.GeofencesGrpcOperations
 import ru.belkacar.telematics.geofence.toProto
 
-@E2E
 @SpringBootTest
+@E2E
+@ServiceGroup("geofence-services")
+@Service("Detector")
+@Detector
 class GeofenceDetectorTests @Autowired constructor(
     private val geofenceGrpcOperations: GeofencesGrpcOperations,
     private val geofenceHelpers: GeofenceHelpers,
