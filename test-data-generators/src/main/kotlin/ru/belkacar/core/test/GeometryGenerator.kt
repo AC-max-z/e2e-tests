@@ -4,7 +4,6 @@ import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.io.geojson.GeoJsonReader
 
 class GeometryGenerator : ObjectGenerator<Geometry> {
-    //    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
     private var geometryType: GeometryType = GeometryType.DEFAULT
 
     private val defaultPolygon = """

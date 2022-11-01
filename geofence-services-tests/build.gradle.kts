@@ -7,6 +7,8 @@ dependencies {
     
     testImplementation(project(":geofencing"))
     testImplementation(project(":broadcasting-platform"))
+    testImplementation(project(":test-matchers"))
+    testImplementation(project(":test-helpers"))
     
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test") {

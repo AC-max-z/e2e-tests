@@ -3,10 +3,7 @@ package ru.belkacar.telematics.geofence
 import io.grpc.ManagedChannel
 import kotlinx.coroutines.reactor.mono
 import org.springframework.stereotype.Component
-import proto.belka.telematics.geofence.v1.CreateGeofenceCommand
-import proto.belka.telematics.geofence.v1.DeleteGeofenceCommand
-import proto.belka.telematics.geofence.v1.GeofenceCommandOpsGrpcKt
-import proto.belka.telematics.geofence.v1.UpdateGeofenceCommand
+import proto.belka.telematics.geofence.v1.*
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import ru.belkacar.core.test.GrpcAuthProvider
@@ -18,6 +15,9 @@ class GeofencesGrpcOperations(
 ) {
 
     private val _geofenceCommands = GeofenceCommandOpsGrpcKt.GeofenceCommandOpsCoroutineStub(telematicsGrpcChannel)
+        .withInterceptors(authProvider.defaultAuthInterceptor.get())
+
+    private val _geofenceQueries = GeofenceQueryOpsGrpcKt.GeofenceQueryOpsCoroutineStub(telematicsGrpcChannel)
         .withInterceptors(authProvider.defaultAuthInterceptor.get())
 
     val geofenceOps: GeofenceOps by lazy {
@@ -41,6 +41,10 @@ class GeofencesGrpcOperations(
 
         fun delete(request: DeleteGeofenceCommand.Request): Mono<DeleteGeofenceCommand.Response> {
             return mono { _geofenceCommands.deleteGeofence(request) }
+        }
+
+        fun getByOwner(request: FindByOwnerQuery.Request): Mono<FindByOwnerQuery.Response> {
+            return mono { _geofenceQueries.findByOwner(request) }
         }
     }
 
