@@ -34,7 +34,19 @@ class CarPositionsHelpers @Autowired constructor(
         carId: CarId<*> = generateCarId { },
         location: Location = LocationGenerator().generate()
     ) {
+        // Delay here is done to prevent situations where
+        //    0. Geofence been updated or deleted or whatever
+        //    1. The update/delete step in geofence helpers checks that geofence-manager now returns updated data BUT
+        //    2. These changes may not yet been dispatched to geofence-detector (for example)
+        //    3. We produce message before geofence-detector (for example) receives info about changes
+        //    4. ???
+        //    5. NO PROFIT!
+        // there may be a more refined way to know if geofence-detector (for example) received expected changes from geofence-manager
+        // but at the time it is not implemented as it's rather challenging (according to Artem Kulik)
+        // hence, the delays
+        // sucks, yea:(
         delay(Duration.ofMillis(DELAY_MESSAGE_PRODUCE_MS)).block()!!
+
         broadcastingPlatformKafkaOperations.producerOps
             .producerLatestCarPosition(
                 getCarPositionEvent(carId, location)
@@ -47,7 +59,7 @@ class CarPositionsHelpers @Autowired constructor(
     }
 
     fun produceCarPositionWithPointType(
-        carId: CarId<*> = generateCarId {  },
+        carId: CarId<*> = generateCarId { },
         pointType: LocationGenerator.PointType = LocationGenerator.PointType.INSIDE_DEFAULT_ZONE
     ) {
         produceCarPosition(carId, LocationGenerator().withPointType(pointType).generate())
