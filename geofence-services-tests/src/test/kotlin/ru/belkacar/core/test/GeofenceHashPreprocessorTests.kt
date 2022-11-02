@@ -30,7 +30,7 @@ const val DELAY_VERIFICATION_MS = 2_000L
 
 @SpringBootTest
 @ServiceGroup("geofence-services")
-@Service("telematics-geofences-hash-preprocessor")
+@Service("telematics-geofence-hash-preprocessor")
 @HashPreprocessor
 class GeofenceHashPreprocessorTests @Autowired constructor(
     private val geofenceGrpcOperations: GeofencesGrpcOperations,
