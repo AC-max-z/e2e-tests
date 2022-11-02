@@ -44,11 +44,10 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @ComponentTest
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should produce AddGeofence command on geofence creation")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9740")
     @JiraIssues("TEL-509")
-    @DisplayName("Should produce AddGeofence command on geofence creation")
     fun addGeofenceCommandOnCreation(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
 
@@ -78,11 +77,10 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @ComponentTest
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should produce UpdateGeofence command on geofence update (change description)")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9776")
     @JiraIssues("TEL-509")
-    @DisplayName("Should produce UpdateGeofence command on geofence update (change description)")
     fun updateGeofenceCommandOnDescriptionUpdate(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
         val newDesc = "Autotests updated description ${faker.bojackHorseman.quotes()}"
@@ -126,11 +124,10 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @ComponentTest
-    @AllureId("9709")
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should produce RemoveGeofence command on geofence deletion")
     @ValueSource(strings = ["driving_zone", "police_impound"])
+    @AllureId("9709")
     @JiraIssues("TEL-509")
-    @DisplayName("Should produce RemoveGeofence command on geofence deletion")
     fun removeGeofenceCommandOnDelete(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
 

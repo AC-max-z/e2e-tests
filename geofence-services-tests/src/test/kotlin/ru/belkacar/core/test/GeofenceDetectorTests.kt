@@ -38,11 +38,10 @@ class GeofenceDetectorTests @Autowired constructor(
         geofenceHelpers.deleteAllGeofencesByOwner()
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should create enter geofence event on entering polygon")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7692")
     @JiraIssues("TEL-565", "TEL-767")
-    @DisplayName("Should create enter geofence event on entering polygon")
     fun enterEventOnEnterPolygon(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
@@ -75,11 +74,10 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should create enter geofence event on first event inside polygon")
     @ValueSource(strings = ["police_impound", "driving_zone"])
     @AllureId("7711")
     @JiraIssues("TEL-565", "TEL-767")
-    @DisplayName("Should create enter geofence event on first event inside polygon")
     fun enterEventOnFirstEventInsidePolygon(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
@@ -105,11 +103,10 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should create leave geofence event on leaving polygon")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7693")
     @JiraIssues("TEL-565", "TEL-767")
-    @DisplayName("Should create leave geofence event on leaving polygon")
     fun leaveEventOnExitPolygon(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
@@ -139,11 +136,10 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should create enter geofence event after increasing polygon")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7708")
     @JiraIssues("TEL-565", "TEL-767")
-    @DisplayName("should create enter geofence event after increasing polygon")
     fun enterEventOnIncreasingPolygon(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
@@ -187,11 +183,10 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should create leave geofence event after decreasing polygon")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7709")
     @JiraIssues("TEL-565", "TEL-767")
-    @DisplayName("Should create leave geofence event after decreasing polygon")
     fun leaveEventOnDecreasingPolygon(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
@@ -235,11 +230,10 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Should create leave geofence event after geofence deletion")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9401")
     @JiraIssues("TEL-565", "TEL-767")
-    @DisplayName("Should create leave geofence event after geofence deletion")
     fun leaveEventOnDeletingPolygon(zoneKey: String) {
         parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
