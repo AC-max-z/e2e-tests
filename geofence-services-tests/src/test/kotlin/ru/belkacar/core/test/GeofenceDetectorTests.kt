@@ -1,6 +1,5 @@
 package ru.belkacar.core.test
 
-import io.qameta.allure.Allure
 import io.qameta.allure.Allure.parameter
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.AfterEach

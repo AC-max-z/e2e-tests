@@ -5,7 +5,6 @@ import io.qameta.allure.Allure.parameter
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,8 +21,6 @@ import ru.belkacar.core.test.tools.step
 import ru.belkacar.telematics.geofence.*
 import java.time.Duration
 import kotlin.test.assertEquals
-import io.qameta.allure.Owner
-import org.junit.jupiter.api.Tag
 
 const val CONSUMER_TIMEOUT_MS = 10_000L
 const val DELAY_VERIFICATION_MS = 2_000L
