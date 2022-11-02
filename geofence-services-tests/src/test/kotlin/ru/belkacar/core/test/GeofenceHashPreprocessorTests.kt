@@ -44,7 +44,8 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @ComponentTest
-    @ParameterizedTest(name = "Should produce AddGeofence command on geofence creation")
+    @DisplayName("Should produce AddGeofence command on geofence creation")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9740")
     @JiraIssues("TEL-509")
@@ -77,7 +78,8 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @ComponentTest
-    @ParameterizedTest(name = "Should produce UpdateGeofence command on geofence update (change description)")
+    @DisplayName("Should produce UpdateGeofence command on geofence update (change description)")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9776")
     @JiraIssues("TEL-509")
@@ -124,7 +126,8 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @ComponentTest
-    @ParameterizedTest(name = "Should produce RemoveGeofence command on geofence deletion")
+    @DisplayName("Should produce RemoveGeofence command on geofence deletion")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9709")
     @JiraIssues("TEL-509")

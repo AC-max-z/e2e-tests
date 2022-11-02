@@ -38,7 +38,8 @@ class GeofenceDetectorTests @Autowired constructor(
         geofenceHelpers.deleteAllGeofencesByOwner()
     }
 
-    @ParameterizedTest(name = "Should create enter geofence event on entering polygon")
+    @DisplayName("Should create enter geofence event on entering polygon")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7692")
     @JiraIssues("TEL-565", "TEL-767")
@@ -74,7 +75,8 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest(name = "Should create enter geofence event on first event inside polygon")
+    @DisplayName("Should create enter geofence event on first event inside polygon")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["police_impound", "driving_zone"])
     @AllureId("7711")
     @JiraIssues("TEL-565", "TEL-767")
@@ -103,7 +105,8 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest(name = "Should create leave geofence event on leaving polygon")
+    @DisplayName("Should create leave geofence event on leaving polygon")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7693")
     @JiraIssues("TEL-565", "TEL-767")
@@ -136,7 +139,8 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest(name = "Should create enter geofence event after increasing polygon")
+    @DisplayName("Should create enter geofence event after increasing polygon")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7708")
     @JiraIssues("TEL-565", "TEL-767")
@@ -183,7 +187,8 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest(name = "Should create leave geofence event after decreasing polygon")
+    @DisplayName("Should create leave geofence event after decreasing polygon")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("7709")
     @JiraIssues("TEL-565", "TEL-767")
@@ -230,7 +235,8 @@ class GeofenceDetectorTests @Autowired constructor(
 
     }
 
-    @ParameterizedTest(name = "Should create leave geofence event after geofence deletion")
+    @DisplayName("Should create leave geofence event after geofence deletion")
+    @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
     @ValueSource(strings = ["driving_zone", "police_impound"])
     @AllureId("9401")
     @JiraIssues("TEL-565", "TEL-767")

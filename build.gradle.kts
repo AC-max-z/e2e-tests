@@ -92,6 +92,7 @@ subprojects {
 
         withType<Test> {
             doFirst {
+                systemProperty("allure.label.layer", "E2E Tests")
                 systemProperty("allure.results.directory", "${rootProject.projectDir}/allure-results")
             }
             testLogging {
