@@ -1,6 +1,7 @@
 package ru.belkacar.core.test
 
 import com.google.protobuf.StringValue
+import io.qameta.allure.Allure.parameter
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -45,10 +46,12 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     @ComponentTest
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @AllureId("")
-    @JiraIssues("")
-    @DisplayName("Should produce AddGeofence command on geofence create")
+    @AllureId("9740")
+    @JiraIssues("TEL-509")
+    @DisplayName("Should produce AddGeofence command on geofence creation")
     fun addGeofenceCommandOnCreation(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
+
         val geofence = step<Geofence>("Create new geofence") {
             geofenceHelpers.createGeofence(zoneKey)!!
         }
@@ -77,10 +80,11 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     @ComponentTest
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @AllureId("")
-    @JiraIssues("")
-    @DisplayName("Should produce UpdateGeofence command on geofence update")
-    fun updateGeofenceCommandOnUpdate(zoneKey: String) {
+    @AllureId("9776")
+    @JiraIssues("TEL-509")
+    @DisplayName("Should produce UpdateGeofence command on geofence update (change description)")
+    fun updateGeofenceCommandOnDescriptionUpdate(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
         val newDesc = "Autotests updated description ${faker.bojackHorseman.quotes()}"
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -122,12 +126,14 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
     }
 
     @ComponentTest
-    @AllureId("")
+    @AllureId("9709")
     @ParameterizedTest
     @ValueSource(strings = ["driving_zone", "police_impound"])
-    @JiraIssues("")
-    @DisplayName("Should produce RemoveGeofence command on geofence delete")
-    fun `should do something on geofence delete`(zoneKey: String) {
+    @JiraIssues("TEL-509")
+    @DisplayName("Should produce RemoveGeofence command on geofence deletion")
+    fun removeGeofenceCommandOnDelete(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
+
         val geofence = step<Geofence>("Create new geofence") {
             geofenceHelpers.createGeofence(zoneKey)!!
         }
@@ -164,25 +170,4 @@ class GeofenceHashPreprocessorTests @Autowired constructor(
 
     }
 
-    @Test
-    @Owner("mzamota")
-    @ServiceGroup("Geofence")
-    @Service("hash-preprocessor")
-    @Tag("hash-preprocessor")
-    @DisplayName("some test")
-    @AllureId("9765")
-    fun test() {
-//        Do this
-        step("Do this") {}
-//        Do that
-        step("Do that") {}
-//        Do something else
-        step("Do something else") {}
-//        ???
-        step("???") {
-
-        }
-//        Profit!
-        step("Profit!") {}
-    }
 }

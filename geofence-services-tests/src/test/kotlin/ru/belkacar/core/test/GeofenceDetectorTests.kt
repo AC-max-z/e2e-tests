@@ -1,5 +1,7 @@
 package ru.belkacar.core.test
 
+import io.qameta.allure.Allure
+import io.qameta.allure.Allure.parameter
 import io.qameta.allure.AllureId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -42,6 +44,7 @@ class GeofenceDetectorTests @Autowired constructor(
     @JiraIssues("TEL-565", "TEL-767")
     @DisplayName("Should create enter geofence event on entering polygon")
     fun enterEventOnEnterPolygon(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -78,6 +81,7 @@ class GeofenceDetectorTests @Autowired constructor(
     @JiraIssues("TEL-565", "TEL-767")
     @DisplayName("Should create enter geofence event on first event inside polygon")
     fun enterEventOnFirstEventInsidePolygon(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -107,6 +111,7 @@ class GeofenceDetectorTests @Autowired constructor(
     @JiraIssues("TEL-565", "TEL-767")
     @DisplayName("Should create leave geofence event on leaving polygon")
     fun leaveEventOnExitPolygon(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence") {
@@ -140,6 +145,7 @@ class GeofenceDetectorTests @Autowired constructor(
     @JiraIssues("TEL-565", "TEL-767")
     @DisplayName("should create enter geofence event after increasing polygon")
     fun enterEventOnIncreasingPolygon(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
         val updatedPolygon = GeometryGenerator().withType(GeometryType.BIGGER).generate()
 
@@ -187,6 +193,7 @@ class GeofenceDetectorTests @Autowired constructor(
     @JiraIssues("TEL-565", "TEL-767")
     @DisplayName("Should create leave geofence event after decreasing polygon")
     fun leaveEventOnDecreasingPolygon(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
         val updatedPolygon = GeometryGenerator().withType(GeometryType.LESSER).generate()
 
@@ -234,6 +241,7 @@ class GeofenceDetectorTests @Autowired constructor(
     @JiraIssues("TEL-565", "TEL-767")
     @DisplayName("Should create leave geofence event after geofence deletion")
     fun leaveEventOnDeletingPolygon(zoneKey: String) {
+        parameter("geofence_type: ", zoneKey)
         val carId = generateCarId { }
 
         val geofence = step<Geofence>("Create new geofence (default)") {
