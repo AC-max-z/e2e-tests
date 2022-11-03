@@ -23,7 +23,7 @@ class Common {
                 logger.error("Got exception while executing ${object {}.javaClass.enclosingMethod.name}")
                 logger.error(e.message)
                 attempt++
-                if (attempt == retries-1) throw e
+                if (attempt == retries) throw e
                 else {
                     Mono.delay(Duration.ofMillis(DELAY_RETRY_MS)).block()!!
                     logger.info("Retrying. Attempt $attempt of $retries")
