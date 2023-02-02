@@ -36,17 +36,12 @@ class LocationGenerator : ObjectGenerator<Location> {
             }
         }
 
-    override fun generate(): Location {
-        return Location(
-            latitude = latitude,
-            longitude = longitude
-        )
-    }
+    override fun generate(): Location = Location(
+        latitude = latitude,
+        longitude = longitude
+    )
 
-    override fun generate(size: Int): List<Location> {
-        return (0..size)
-            .map { generate() }
-    }
+    override fun generate(size: Int): List<Location> = (0..size).map { generate() }
 
     enum class PointType {
         INSIDE_DEFAULT_ZONE, OUTSIDE_DEFAULT_ZONE, INSIDE_SMALL_ZONE, INSIDE_PINNED_OUT_ZONE

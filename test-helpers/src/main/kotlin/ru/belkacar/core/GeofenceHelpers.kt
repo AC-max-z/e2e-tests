@@ -20,6 +20,7 @@ import kotlin.test.assertIs
 
 const val CONSUMER_TIMEOUT_MS = 10_000L
 const val DELAY_RETRY_MS = 1_000L
+const val RETRY_AMT = 10
 
 @Component
 class GeofenceHelpers @Autowired constructor(
@@ -39,8 +40,8 @@ class GeofenceHelpers @Autowired constructor(
         logger.info("Trying to create new geofence with type \"$zoneType\" and description: \"$geofenceDescription\"...")
         val geofence = Common()
             .executeWithRetry(
-                10,
-                {
+                retries = RETRY_AMT,
+                callFunc = {
                     geofenceGrpcOperations.geofenceOps
                         .create(
                             CreateGeofenceCommandKt.request {
@@ -53,7 +54,7 @@ class GeofenceHelpers @Autowired constructor(
                         .map { it.geofence }
                         .block()!!
                 },
-                logger
+                logger = logger
             )!!
         verifyGeofenceCreated(geofence)
         return geofence
@@ -64,7 +65,8 @@ class GeofenceHelpers @Autowired constructor(
         logger.info("Checking if geofence (${geofence.id.value.uuidString}) was successfully created...")
         val geofenceList = Common()
             .executeWithRetry(
-                10, {
+                retries = RETRY_AMT,
+                callFunc = {
                     geofenceGrpcOperations
                         .geofenceOps
                         .getByOwner(
@@ -75,8 +77,8 @@ class GeofenceHelpers @Autowired constructor(
                         .map { it.geofencesList }
                         .block()!!
                 },
-                logger,
-                predicate
+                logger = logger,
+                predicate = predicate
             )
 
         if (predicate(geofenceList)) return true
@@ -106,18 +108,15 @@ class GeofenceHelpers @Autowired constructor(
         logger.info("Checking that geofence detector state has changed (with timeout=$CONSUMER_TIMEOUT_MS ms)...")
         logger.info("(waiting for msg with key=$carId and geofence with id=${geofence.id.value.uuidString} present in lastPointGeofences and absent in currentPoinGeofences)")
 
-        fun skipCondition(record: ConsumerRecord<String, GeofenceDetectorKafkaState>): Boolean {
-            return record.key() == carId.value.toString()
+        fun skipCondition(record: ConsumerRecord<String, GeofenceDetectorKafkaState>): Boolean =
+            record.key() == carId.value.toString()
                     && GeofenceMatchers.DetectorState.LastPointGeofences()
                 .hasAtLeastOneGeofence(geofence, record.value())
                     && GeofenceMatchers.DetectorState.CurrentPointGeofences().hasNoGeofence(geofence, record.value())
-        }
 
-        fun checks(record: ConsumerRecord<String, GeofenceDetectorKafkaState>) {
-            return with(record) {
-                assert(GeofenceMatchers.DetectorState.CurrentPointGeofences().hasNoGeofence(geofence, value()))
-                assert(GeofenceMatchers.DetectorState.LastPointGeofences().hasExactlyOneGeofence(geofence, value()))
-            }
+        fun checks(record: ConsumerRecord<String, GeofenceDetectorKafkaState>) = with(record) {
+            assert(GeofenceMatchers.DetectorState.CurrentPointGeofences().hasNoGeofence(geofence, value()))
+            assert(GeofenceMatchers.DetectorState.LastPointGeofences().hasExactlyOneGeofence(geofence, value()))
         }
 
         checkGeofenceDetectorStateChange(::skipCondition, ::checks)
@@ -127,17 +126,14 @@ class GeofenceHelpers @Autowired constructor(
         logger.info("Checking that geofence detector state has changed (with timeout=$CONSUMER_TIMEOUT_MS ms)...")
         logger.info("(waiting for msg with key=$carId and geofence with id=${geofence.id.value.uuidString} present in currentPoinGeofences and absent in lastPointGeofences)")
 
-        fun skipCondition(record: ConsumerRecord<String, GeofenceDetectorKafkaState>): Boolean {
-            return record.key() == carId.value.toString()
+        fun skipCondition(record: ConsumerRecord<String, GeofenceDetectorKafkaState>): Boolean =
+            record.key() == carId.value.toString()
                     && GeofenceMatchers.DetectorState.CurrentPointGeofences()
                 .hasAtLeastOneGeofence(geofence, record.value())
-        }
 
-        fun checks(record: ConsumerRecord<String, GeofenceDetectorKafkaState>) {
-            return with(record) {
-                assert(GeofenceMatchers.DetectorState.LastPointGeofences().hasNoGeofence(geofence, value()))
-                assert(GeofenceMatchers.DetectorState.CurrentPointGeofences().hasExactlyOneGeofence(geofence, value()))
-            }
+        fun checks(record: ConsumerRecord<String, GeofenceDetectorKafkaState>) = with(record) {
+            assert(GeofenceMatchers.DetectorState.LastPointGeofences().hasNoGeofence(geofence, value()))
+            assert(GeofenceMatchers.DetectorState.CurrentPointGeofences().hasExactlyOneGeofence(geofence, value()))
         }
 
         checkGeofenceDetectorStateChange(::skipCondition, ::checks)
@@ -167,16 +163,13 @@ class GeofenceHelpers @Autowired constructor(
     fun checkEnterGeofenceEventCreated(carId: CarId<*>, geofence: Geofence) {
         logger.info("Checking that ${CarEnteredGeofence::class.java.simpleName} event created in Geofence Car Events topic ")
 
-        fun skipCondition(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>): Boolean {
-            return record.key() == carId.value.toString()
+        fun skipCondition(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>): Boolean =
+            record.key() == carId.value.toString()
                     && record.value().payload.geofence.id.value == geofence.id.toUUID()
                     && record.value().payload::class.java == CarEnteredGeofence::class.java
-        }
 
-        fun checks(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>) {
-            return with(record) {
-                assertIs<CarEnteredGeofence>(value().payload)
-            }
+        fun checks(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>) = with(record) {
+            assertIs<CarEnteredGeofence>(value().payload)
         }
 
         checkGeofenceEventCreated(::skipCondition, ::checks)
@@ -185,20 +178,16 @@ class GeofenceHelpers @Autowired constructor(
     fun checkLeaveGeofenceEventCreated(carId: CarId<*>, geofence: Geofence) {
         logger.info("Checking that ${CarLeavedGeofence::class.java.simpleName} event created in Geofence Car Events topic ")
 
-        fun skipCondition(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>): Boolean {
-            return record.key() == carId.value.toString()
+        fun skipCondition(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>): Boolean =
+            record.key() == carId.value.toString()
                     && record.value().payload.geofence.id.value == geofence.id.toUUID()
                     && record.value().payload::class.java == CarLeavedGeofence::class.java
-        }
 
-        fun checks(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>) {
-            return with(record) {
-                assertIs<CarLeavedGeofence>(value().payload)
-            }
+        fun checks(record: ConsumerRecord<String, CarGeofenceEventKafkaMessage>) = with(record) {
+            assertIs<CarLeavedGeofence>(value().payload)
         }
 
         checkGeofenceEventCreated(::skipCondition, ::checks)
-
     }
 
     fun verifyGeofenceUpdated(geofence: Geofence, conditionPredicate: (Geofence) -> Boolean): Boolean {
@@ -209,8 +198,8 @@ class GeofenceHelpers @Autowired constructor(
         }
         val geofenceList = Common()
             .executeWithRetry(
-                10,
-                {
+                retries = RETRY_AMT,
+                callFunc = {
                     geofenceGrpcOperations
                         .geofenceOps
                         .getByOwner(
@@ -221,8 +210,8 @@ class GeofenceHelpers @Autowired constructor(
                         .map { it.geofencesList }
                         .block()!!
                 },
-                logger,
-                predicateOnResult
+                logger = logger,
+                predicate = predicateOnResult
             )
 
         if (predicateOnResult(geofenceList)) return true
@@ -233,8 +222,8 @@ class GeofenceHelpers @Autowired constructor(
         logger.info("Checking if geofence (${geofence.id.value.uuidString}) was successfully deleted...")
         val predicate = { geofenceList: List<Geofence>? -> geofenceList?.none { i -> i.id == geofence.id } ?: false }
         val geofenceList = Common().executeWithRetry(
-            10,
-            {
+            retries = RETRY_AMT,
+            callFunc = {
                 geofenceGrpcOperations
                     .geofenceOps
                     .getByOwner(
@@ -245,8 +234,8 @@ class GeofenceHelpers @Autowired constructor(
                     .map { it.geofencesList }
                     .block()!!
             },
-            logger,
-            predicate
+            logger = logger,
+            predicate = predicate
         )
 
         if (predicate(geofenceList)) return true

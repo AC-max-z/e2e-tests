@@ -1,7 +1,9 @@
 import com.google.protobuf.gradle.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.google.protobuf")
+    kotlin("jvm") version "1.8.10"
 }
 
 dependencies {
@@ -19,6 +21,7 @@ dependencies {
 
 //    testImplementation("ru.belkacar.core.test.tools", "reactor-allure-extentions")
 //    testImplementation("ru.belkacar.core.test.tools", "allure-annotations")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 //sourceSets {
@@ -62,3 +65,14 @@ dependencies {
 //        }
 //    }
 //}
+repositories {
+    mavenCentral()
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}

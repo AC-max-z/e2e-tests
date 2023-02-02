@@ -5,9 +5,11 @@ import com.google.protobuf.gradle.plugins
 import com.google.protobuf.gradle.proto
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.google.protobuf")
+    kotlin("jvm") version "1.8.10"
 }
 
 dependencies {
@@ -27,6 +29,7 @@ dependencies {
     compileOnly("io.grpc", "grpc-protobuf")
     compileOnly("io.grpc", "grpc-kotlin-stub")
     compileOnly("io.grpc","grpc-stub")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 sourceSets {
@@ -69,4 +72,15 @@ protobuf {
             }
         }
     }
+}
+repositories {
+    mavenCentral()
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }

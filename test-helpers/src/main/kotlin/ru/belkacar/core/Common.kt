@@ -24,10 +24,8 @@ class Common {
                 logger.error(e.message)
                 attempt++
                 if (attempt == retries) throw e
-                else {
-                    Mono.delay(Duration.ofMillis(DELAY_RETRY_MS)).block()!!
-                    logger.info("Retrying. Attempt $attempt of $retries")
-                }
+                Mono.delay(Duration.ofMillis(DELAY_RETRY_MS)).block()!!
+                logger.info("Retrying. Attempt $attempt of $retries")
             }
         }
         return result

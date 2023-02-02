@@ -2,9 +2,12 @@ package ru.belkacar.core.test
 
 import io.qameta.allure.Allure.parameter
 import io.qameta.allure.AllureId
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,6 +26,7 @@ import ru.belkacar.telematics.geofence.GeofencesGrpcOperations
 import ru.belkacar.telematics.geofence.toProto
 
 @SpringBootTest
+@Execution(ExecutionMode.CONCURRENT)
 @E2E
 @ServiceGroup("geofence-services")
 @Service("telematics-geofence-detector")
@@ -32,10 +36,6 @@ class GeofenceDetectorTests @Autowired constructor(
     private val geofenceHelpers: GeofenceHelpers,
     private val carPositionsHelpers: CarPositionsHelpers
 ) {
-    @AfterEach
-    fun cleanup() {
-        geofenceHelpers.deleteAllGeofencesByOwner()
-    }
 
     @DisplayName("Should create enter geofence event on entering polygon")
     @ParameterizedTest(name = "{displayName} (geofence_type: {0})")
@@ -166,8 +166,7 @@ class GeofenceDetectorTests @Autowired constructor(
                 )
                 .map { it.geofence }
                 .doOnSuccess {
-                    val predicate = { g: Geofence -> g.geometry == updatedPolygon.toProto() }
-                    geofenceHelpers.verifyGeofenceUpdated(geofence, predicate)
+                    geofenceHelpers.verifyGeofenceUpdated(geofence) { g: Geofence -> g.geometry == updatedPolygon.toProto() }
                 }
                 .block()!!
         }
@@ -214,8 +213,7 @@ class GeofenceDetectorTests @Autowired constructor(
                 )
                 .map { it.geofence }
                 .doOnSuccess {
-                    val predicate = { g: Geofence -> g.geometry == updatedPolygon.toProto() }
-                    geofenceHelpers.verifyGeofenceUpdated(geofence, predicate)
+                    geofenceHelpers.verifyGeofenceUpdated(geofence) { g: Geofence -> g.geometry == updatedPolygon.toProto() }
                 }
                 .block()!!
         }
@@ -399,5 +397,13 @@ class GeofenceDetectorTests @Autowired constructor(
             geofenceHelpers.checkEnterGeofenceEventCreated(carId, pinnedOutGeofence)
         }
 
+    }
+
+    companion object {
+        @JvmStatic
+        @AfterAll
+        fun cleanup(geofenceDetectorTests: GeofenceDetectorTests): Unit {
+            geofenceDetectorTests.geofenceHelpers.deleteAllGeofencesByOwner()
+        }
     }
 }

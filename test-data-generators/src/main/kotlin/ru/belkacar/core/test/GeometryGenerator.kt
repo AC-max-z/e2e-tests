@@ -268,32 +268,25 @@ class GeometryGenerator : ObjectGenerator<Geometry> {
         }
     """.trimIndent()
 
-    private fun decodeGeoJson(geometryJson: String): Geometry {
-        return with(GeoJsonReader()) {
-            read(geometryJson)
-        }
-    }
+    private fun decodeGeoJson(geometryJson: String): Geometry = with(GeoJsonReader()) { read(geometryJson) }
 
-    private fun getGeo(): String {
-        return when (geometryType) {
-            GeometryType.LESSER -> smallerThanDefaultPolygon
-            GeometryType.BIGGER -> biggerThanDefaultPolygon
-            GeometryType.DEFAULT -> defaultPolygon
-            GeometryType.POINT -> point
-            GeometryType.LINESTRING -> linestring
-            GeometryType.PINNED_OUT -> boobLick
-            GeometryType.MOSCOW -> moscow
-        }
-    }
 
+    private fun getGeo(): String = when (geometryType) {
+        GeometryType.LESSER -> smallerThanDefaultPolygon
+        GeometryType.BIGGER -> biggerThanDefaultPolygon
+        GeometryType.DEFAULT -> defaultPolygon
+        GeometryType.POINT -> point
+        GeometryType.LINESTRING -> linestring
+        GeometryType.PINNED_OUT -> boobLick
+        GeometryType.MOSCOW -> moscow
+    }
 
     private var geometry: () -> Geometry = { decodeGeoJson(getGeo()) }
 
     fun withType(geometryType: GeometryType) = apply { this.geometryType = geometryType }
 
-    override fun generate(): Geometry {
-        return geometry()
-    }
+    override fun generate(): Geometry = geometry()
+
 }
 
 enum class GeometryType {
